@@ -15,10 +15,38 @@ Return:
 int countWord(char* filename, char* word, char* line, int size)
 {
     // Open a file whose name is filename for reading
+    FILE * fid;
+    fid = fopen(filename, "r");
+
     // If fopen fails, return -1. 
+    if(fid == NULL)
+    {
+        printf("Come on you guys, there it is right there in front of you the whole time. You're dereferencing a null pointer! Open your eyes!");
+        return -1;
+    }
+
     // Else, set ret to zero
-    
+    int ret;
+    ret = 0;
+    char * p;
+    p = line;
+
+    while(fgets(line, size, fid) != NULL)
+    {
+        p = strstr(line, word);
+        while((p  != NULL) && (strlen(p ) != 0))
+        {
+        p += strlen(word);
+        ret++;
+        if(p  != NULL)
+        {
+            p  = strstr(p , word);
+        }
+        }
+    }
+ 
     // Use fgets to read the file in line-by-line
+
     // If the word appears in the line, increment ret
     // It is possible that the same word appears multiple times in the line
 
@@ -28,4 +56,6 @@ int countWord(char* filename, char* word, char* line, int size)
     /* 2. If the line is "aaaaa" and the word is "aa", the count is defined as follows:
           The first two letters are consumed when the first match occurs. The next
           match starts at the third character. Thus, the correct answer is 2, not 4.*/
+    fclose(fid);
+    return ret;
 }
